@@ -95,19 +95,17 @@ int main() {
 
     int mylist[N_LIST];
 
-    // Step 1: 複製原始清單
+    // Step 1: 測試用，整個清單一次排序
     listncopy(mylist, original_list, N_LIST);
-
-    // Step 2: 執行一次完整排序（非 thread 用於測試）
     gettimeofday(&s, NULL);
-    do_sort(&(thread_param) { .id = "a1115547-X", .data = mylist, .size = N_LIST });
+    do_sort(&(thread_param){ .id = "a1115547-X", .data = mylist, .size = N_LIST });
     gettimeofday(&e, NULL);
     t0 = usec_elapsed(s, e);
 
-    // Step 3: 顯示原始清單
+    // Step 2: 顯示原始清單
     print_list("a1115547-M", "All-Old", original_list, N_LIST);
 
-    // Step 3: 排序 threads
+    // Step 3: 啟動兩個 sorting threads
     listncopy(sorted_list, original_list, N_LIST); // 重設 sorted_list
 
     snprintf(p1.id, sizeof(p1.id), "%s#0", student_id);
@@ -126,7 +124,7 @@ int main() {
     gettimeofday(&e, NULL);
     t1 = usec_elapsed(s, e);
 
-    // Step 4: 合併 thread
+    // Step 4: 執行 merging thread
     snprintf(pm.id, sizeof(pm.id), "%s#M", student_id);
     pm.data = merged_list;
     pm.size = N_LIST;
@@ -137,11 +135,10 @@ int main() {
     gettimeofday(&e, NULL);
     tm = usec_elapsed(s, e);
 
-    // Step 5: 顯示合併後的完整清單
+    // Step 5: 顯示排序後結果
     print_list(student_id, "All-New", merged_list, N_LIST);
-
-    // Step 6: 顯示總耗時
     printf("%s-M spent %ld usec\n", student_id, t1 + tm);
 
     return 0;
 }
+
